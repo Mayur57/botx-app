@@ -36,7 +36,6 @@ class loginPageState extends State<loginPage> {
         "password": password,
       }));
       print(u);
-      //apiTest();
       return userModelFromJson(u);
     } else {
       print(response1.statusCode);
@@ -73,11 +72,9 @@ class loginPageState extends State<loginPage> {
       }));
       print(api);
       botTest();
-      //return (userModelFromJson(user));
     } else {
       print(response2.statusCode);
       botTest();
-      //return null;
     }
   }
 
