@@ -23,6 +23,7 @@ class _MapPageState extends State<MapPage> {
   static LatLng _initialPosition;
   Completer<GoogleMapController> _controller = Completer();
   Map<PolylineId, Polyline> polyLines = {};
+  GoogleMapController _mapController;
   PolylinePoints polylinePoints = PolylinePoints();
   String route;
 
@@ -34,6 +35,12 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     _getUserLocation();
+  }
+
+  void _setMapStyle(GoogleMapController controller) async {
+    String style = await DefaultAssetBundle.of(context).loadString('map/mapstyle.json');
+    _mapController.setMapStyle(style);
+
   }
 
   @override
@@ -67,9 +74,7 @@ class _MapPageState extends State<MapPage> {
                   tiltGesturesEnabled: true,
                   initialCameraPosition:
                       CameraPosition(target: _initialPosition, zoom: 16),
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
+                  onMapCreated: _onMapCreated,
                   onLongPress: _Marker,
                   markers: myMarker,
                   polylines: Set<Polyline>.of(polyLines.values),
@@ -82,6 +87,14 @@ class _MapPageState extends State<MapPage> {
             bottomNavigationBar: AdvancedNavBar(),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           );
+  }
+
+  void _onMapCreated(GoogleMapController controller){
+    _mapController = controller;
+    setState(() {
+
+    });
+    _setMapStyle(controller);
   }
 
   // ignore: non_constant_identifier_names
