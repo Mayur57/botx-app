@@ -24,7 +24,7 @@ class _MapPageState extends State<MapPage> {
   PolylinePoints polylinePoints = PolylinePoints();
   String route;
 
-  final googleApiKey = "AIzaSyCxl84PVtxHN6SmJ_6RD0qPBv-SJBz7eic";
+
   Set<Marker> myMarker = {};
   MapType _currentMapType = MapType.normal;
 
@@ -147,7 +147,7 @@ class _MapPageState extends State<MapPage> {
                       padding: const EdgeInsets.all(6.0),
                       child: IconButton(
                         icon: Icon(
-                          Icons.show_chart,
+                          Icons.lock_open,
                           size: 30,
                         ),
                         onPressed: () {}, //TODO: Change page here
@@ -159,7 +159,7 @@ class _MapPageState extends State<MapPage> {
                       padding: const EdgeInsets.all(6.0),
                       child: IconButton(
                         icon: Icon(
-                          Icons.show_chart,
+                          Icons.graphic_eq,
                           size: 30,
                         ),
                         onPressed: () {}, //TODO: Change page here
@@ -172,7 +172,7 @@ class _MapPageState extends State<MapPage> {
                       padding: const EdgeInsets.all(6.0),
                       child: IconButton(
                         icon: Icon(
-                          Icons.show_chart,
+                          Icons.timer,
                           size: 30,
                         ),
                         onPressed: () {}, //TODO: Change page here
@@ -184,7 +184,7 @@ class _MapPageState extends State<MapPage> {
                       padding: const EdgeInsets.all(6.0),
                       child: IconButton(
                         icon: Icon(
-                          Icons.show_chart,
+                          Icons.person,
                           size: 30,
                         ),
                         onPressed: () {}, //TODO: Change page here
