@@ -11,7 +11,6 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 //TODO: Move API key call to new file : globals.dart
 //TODO: Move widgets to new file : widgets.dart
 
-
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
@@ -84,12 +83,40 @@ class _MapPageState extends State<MapPage> {
                     icon: Icon(Icons.map),
                   ),
                 ),
-                Card(
-                  child: TextField(), //TODO: Add a search bar here
+                SafeArea(
+                  //TODO: Make a widget in new file
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Card(
+                          elevation: 8,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(180.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 2, vertical: 2),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Search a location',
+                                prefixIcon: Icon(Icons.search),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-            floatingActionButton: Container( //TODO: Make a widget in new file
+            floatingActionButton: Container(
+              //TODO: Make a widget in new file
               height: 65.0,
               width: 65.0,
               child: FittedBox(
@@ -110,13 +137,14 @@ class _MapPageState extends State<MapPage> {
                 ),
               ),
             ),
-            bottomNavigationBar: BottomAppBar( //TODO: Make a widget in new file
+            bottomNavigationBar: BottomAppBar(
+              //TODO: Make a widget in new file
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(6.0),
                       child: IconButton(
                         icon: Icon(
                           Icons.show_chart,
@@ -128,7 +156,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(6.0),
                       child: IconButton(
                         icon: Icon(
                           Icons.show_chart,
@@ -141,7 +169,7 @@ class _MapPageState extends State<MapPage> {
                   Expanded(child: Text('')),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(6.0),
                       child: IconButton(
                         icon: Icon(
                           Icons.show_chart,
@@ -153,7 +181,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(6.0),
                       child: IconButton(
                         icon: Icon(
                           Icons.show_chart,
