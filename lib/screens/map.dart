@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:botx/requests/google_maps_requests.dart';
+import 'package:botx/widgets/advancedNavigationBar.dart';
+import 'package:botx/widgets/centerFloatingActionButton.dart';
+import 'package:botx/widgets/customSearchBar.dart';
+import 'package:botx/widgets/mapToggleFAB.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,8 +12,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 //TODO: Save all strings into a different file : strings.dart
-//TODO: Move API key call to new file : globals.dart
-//TODO: Move widgets to new file : widgets.dart
 
 class MapPage extends StatefulWidget {
   @override
@@ -72,139 +74,14 @@ class _MapPageState extends State<MapPage> {
                   markers: myMarker,
                   polylines: Set<Polyline>.of(polyLines.values),
                 ),
-                Positioned(
-                  bottom: 30,
-                  right: 10,
-                  //TODO: Style this button
-                  child: FloatingActionButton.extended(
-                    tooltip: 'Toggle the map type',
-                    onPressed: _onMapTypeButtonPressed,
-                    label: Text("MAP TYPE"),
-                    icon: Icon(Icons.map),
-                  ),
-                ),
-                SafeArea(
-                  //TODO: Make a widget in new file
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Card(
-                          elevation: 8,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(180.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 2, vertical: 2),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Search a location',
-                                prefixIcon: Icon(Icons.search),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                MapToogleFAB(),
+                SearchBar(),
               ],
             ),
-            floatingActionButton: Container(
-              //TODO: Make a widget in new file
-              height: 65.0,
-              width: 65.0,
-              child: FittedBox(
-                child: FloatingActionButton(
-                  onPressed: () {},
-                  tooltip: 'New Request',
-                  child: Transform.rotate(
-                    angle: 270 * pi / 180,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.send,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                  elevation: 4.0,
-                ),
-              ),
-            ),
-            bottomNavigationBar: BottomAppBar(
-              //TODO: Make a widget in new file
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.lock_open,
-                          size: 30,
-                        ),
-                        onPressed: () {}, //TODO: Change page here
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.graphic_eq,
-                          size: 30,
-                        ),
-                        onPressed: () {}, //TODO: Change page here
-                      ),
-                    ),
-                  ),
-                  Expanded(child: Text('')),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.timer,
-                          size: 30,
-                        ),
-                        onPressed: () {}, //TODO: Change page here
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.person,
-                          size: 30,
-                        ),
-                        onPressed: () {}, //TODO: Change page here
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: CenterFAB(),
+            bottomNavigationBar: AdvancedNavBar(),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           );
-  }
-
-  _onMapTypeButtonPressed() {
-    setState(() {
-      _currentMapType = _currentMapType == MapType.normal
-          ? MapType.satellite
-          : MapType.normal;
-    });
   }
 
   // ignore: non_constant_identifier_names
