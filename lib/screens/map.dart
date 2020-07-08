@@ -1,10 +1,17 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:botx/requests/google_maps_requests.dart';
+import 'package:botx/widgets/advancedNavigationBar.dart';
+import 'package:botx/widgets/centerFloatingActionButton.dart';
+import 'package:botx/widgets/customSearchBar.dart';
+import 'package:botx/widgets/mapToggleFAB.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+
+//TODO: Save all strings into a different file : strings.dart
 
 class MapPage extends StatefulWidget {
   @override
@@ -12,13 +19,15 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  var isGpsEnabled = Geolocator().isLocationServiceEnabled();
   static LatLng _initialPosition;
   Completer<GoogleMapController> _controller = Completer();
   Map<PolylineId, Polyline> polyLines = {};
+  GoogleMapController _mapController;
   PolylinePoints polylinePoints = PolylinePoints();
   String route;
 
-  final googleApiKey = "AIzaSyCxl84PVtxHN6SmJ_6RD0qPBv-SJBz7eic";
+
   Set<Marker> myMarker = {};
   MapType _currentMapType = MapType.normal;
 
@@ -28,60 +37,68 @@ class _MapPageState extends State<MapPage> {
     _getUserLocation();
   }
 
+  void _setMapStyle(GoogleMapController controller) async {
+    String style = await DefaultAssetBundle.of(context).loadString('map/mapstyle.json');
+    _mapController.setMapStyle(style);
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return _initialPosition == null
-        ? Container(
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                CircularProgressIndicator(),
-                Text(
-                  'Getting Location',
-                  textAlign: TextAlign.center,
-                ),
-              ],
+        ? Scaffold(
+            backgroundColor: Colors.white,
+            body: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(),
+                  Text(
+                    'Getting Location',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           )
-        : new Scaffold(
+        : Scaffold(
             body: Stack(
               children: <Widget>[
                 GoogleMap(
+                  myLocationButtonEnabled: false,
+                  compassEnabled: false,
+                  zoomControlsEnabled: false,
                   myLocationEnabled: true,
                   mapType: _currentMapType,
                   tiltGesturesEnabled: true,
                   initialCameraPosition:
-                      CameraPosition(target: _initialPosition, zoom: 20),
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
+                      CameraPosition(target: _initialPosition, zoom: 16),
+                  onMapCreated: _onMapCreated,
                   onLongPress: _Marker,
                   markers: myMarker,
                   polylines: Set<Polyline>.of(polyLines.values),
                 ),
-                Positioned(
-                  bottom: 30,
-                  right: 10,
-                  child: FloatingActionButton(
-                    onPressed: _onMapTypeButtonPressed,
-                    child: Icon(Icons.map),
-                  ),
-                )
+                MapToogleFAB(),
+                SearchBar(),
               ],
             ),
+            floatingActionButton: CenterFAB(),
+            bottomNavigationBar: AdvancedNavBar(),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           );
   }
 
-  _onMapTypeButtonPressed() {
+  void _onMapCreated(GoogleMapController controller){
+    _mapController = controller;
     setState(() {
-      _currentMapType = _currentMapType == MapType.normal
-          ? MapType.satellite
-          : MapType.normal;
+
     });
+    _setMapStyle(controller);
   }
 
-  _Marker(LatLng tappedPoint) {
+  // ignore: non_constant_identifier_names
+  _Marker(LatLng tappedPoint) async {
     myMarker = {};
     setState(() {
       myMarker.add(
