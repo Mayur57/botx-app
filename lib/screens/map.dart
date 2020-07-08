@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:botx/requests/google_maps_requests.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +7,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
+//TODO: Save all strings into a different file : strings.dart
+//TODO: Move API key call to new file : globals.dart
+//TODO: Move widgets to new file : widgets.dart
+
+
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
+  var isGpsEnabled = Geolocator().isLocationServiceEnabled();
   static LatLng _initialPosition;
   Completer<GoogleMapController> _controller = Completer();
   Map<PolylineId, Polyline> polyLines = {};
@@ -31,28 +38,34 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return _initialPosition == null
-        ? Container(
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                CircularProgressIndicator(),
-                Text(
-                  'Getting Location',
-                  textAlign: TextAlign.center,
-                ),
-              ],
+        ? Scaffold(
+            backgroundColor: Colors.white,
+            body: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(),
+                  Text(
+                    'Getting Location',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           )
-        : new Scaffold(
+        : Scaffold(
             body: Stack(
               children: <Widget>[
                 GoogleMap(
+                  myLocationButtonEnabled: false,
+                  compassEnabled: false,
+                  zoomControlsEnabled: false,
                   myLocationEnabled: true,
                   mapType: _currentMapType,
                   tiltGesturesEnabled: true,
                   initialCameraPosition:
-                      CameraPosition(target: _initialPosition, zoom: 20),
+                      CameraPosition(target: _initialPosition, zoom: 16),
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
                   },
@@ -63,13 +76,98 @@ class _MapPageState extends State<MapPage> {
                 Positioned(
                   bottom: 30,
                   right: 10,
-                  child: FloatingActionButton(
+                  //TODO: Style this button
+                  child: FloatingActionButton.extended(
+                    tooltip: 'Toggle the map type',
                     onPressed: _onMapTypeButtonPressed,
-                    child: Icon(Icons.map),
+                    label: Text("MAP TYPE"),
+                    icon: Icon(Icons.map),
                   ),
-                )
+                ),
+                Card(
+                  child: TextField(), //TODO: Add a search bar here
+                ),
               ],
             ),
+            floatingActionButton: Container( //TODO: Make a widget in new file
+              height: 65.0,
+              width: 65.0,
+              child: FittedBox(
+                child: FloatingActionButton(
+                  onPressed: () {},
+                  tooltip: 'New Request',
+                  child: Transform.rotate(
+                    angle: 270 * pi / 180,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.send,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                  elevation: 4.0,
+                ),
+              ),
+            ),
+            bottomNavigationBar: BottomAppBar( //TODO: Make a widget in new file
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.show_chart,
+                          size: 30,
+                        ),
+                        onPressed: () {}, //TODO: Change page here
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.show_chart,
+                          size: 30,
+                        ),
+                        onPressed: () {}, //TODO: Change page here
+                      ),
+                    ),
+                  ),
+                  Expanded(child: Text('')),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.show_chart,
+                          size: 30,
+                        ),
+                        onPressed: () {}, //TODO: Change page here
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.show_chart,
+                          size: 30,
+                        ),
+                        onPressed: () {}, //TODO: Change page here
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
           );
   }
 
@@ -81,7 +179,8 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  _Marker(LatLng tappedPoint) {
+  // ignore: non_constant_identifier_names
+  _Marker(LatLng tappedPoint) async {
     myMarker = {};
     setState(() {
       myMarker.add(
