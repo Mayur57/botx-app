@@ -1,13 +1,6 @@
-import 'dart:async';
 import 'dart:math';
-import 'package:botx/requests/google_maps_requests.dart';
-import 'package:botx/widgets/advancedNavigationBar.dart';
-import 'package:botx/widgets/customSearchBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 class CenterFAB extends StatefulWidget {
   @override
