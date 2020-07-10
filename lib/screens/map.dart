@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:botx/requests/google_maps_requests.dart';
 import 'package:botx/widgets/advancedNavigationBar.dart';
 import 'package:botx/widgets/centerFloatingActionButton.dart';
@@ -19,6 +18,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+
   var isGpsEnabled = Geolocator().isLocationServiceEnabled();
   static LatLng _initialPosition;
   Completer<GoogleMapController> _controller = Completer();
@@ -26,8 +26,6 @@ class _MapPageState extends State<MapPage> {
   GoogleMapController _mapController;
   PolylinePoints polylinePoints = PolylinePoints();
   String route;
-
-
   Set<Marker> myMarker = {};
   MapType _currentMapType = MapType.normal;
 
@@ -40,7 +38,6 @@ class _MapPageState extends State<MapPage> {
   void _setMapStyle(GoogleMapController controller) async {
     String style = await DefaultAssetBundle.of(context).loadString('map/mapstyle.json');
     _mapController.setMapStyle(style);
-
   }
 
   @override
@@ -79,7 +76,8 @@ class _MapPageState extends State<MapPage> {
                   markers: myMarker,
                   polylines: Set<Polyline>.of(polyLines.values),
                 ),
-                MapToogleFAB(),
+                //MapToogleFAB(),
+                ///Disabled due to developer request
                 SearchBar(),
               ],
             ),
