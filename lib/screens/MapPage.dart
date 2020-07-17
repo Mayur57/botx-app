@@ -18,9 +18,8 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-
   Timer _timer;
-  bool delayTimeoutFactor = false;
+  bool delayTimeoutConstant = false;
   var isGpsEnabled = Geolocator().isLocationServiceEnabled();
   static LatLng _initialPosition;
   Completer<GoogleMapController> _controller = Completer();
@@ -41,7 +40,7 @@ class _MapPageState extends State<MapPage> {
   _setTimer() {
     _timer = new Timer(Duration(milliseconds: 2000), () { //Timeout is set to 2 seconds for the location warning
       setState(() {
-        delayTimeoutFactor = true;
+        delayTimeoutConstant = true;
       });
     });
   }
@@ -90,7 +89,7 @@ class _MapPageState extends State<MapPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Container(
                       height: 70,
-                      child: delayTimeoutFactor ? Text(
+                      child: delayTimeoutConstant ? Text(
                         "Important: If you see this screen for more than 5 seconds, please check your Device Location settings and enable Location Services with location accuracy set to HIGH ACCURACY.",
                         textAlign: TextAlign.justify,
                         style: TextStyle(fontSize: 11),
@@ -134,7 +133,6 @@ class _MapPageState extends State<MapPage> {
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     setState(() {});
-
     _setMapStyle(controller);
   }
 
