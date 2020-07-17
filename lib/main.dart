@@ -1,5 +1,5 @@
+import 'package:botx/util/router.dart';
 import 'package:flutter/material.dart';
-import 'package:botx/screens/map.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +11,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BotX',
-      home: MapPage(),
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

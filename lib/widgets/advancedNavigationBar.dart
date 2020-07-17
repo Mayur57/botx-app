@@ -39,7 +39,9 @@ class _AdvancedNavBarState extends State<AdvancedNavBar> {
                   size: _iconSize,
                   color: _iconColor,
                 ),
-                onPressed: () {}, //TODO: Change page here
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/vitals');
+                }, //TODO: Change page here
               ),
             ),
           ),
@@ -53,7 +55,9 @@ class _AdvancedNavBarState extends State<AdvancedNavBar> {
                   size: _iconSize,
                   color: _iconColor,
                 ),
-                onPressed: () {}, //TODO: Change page here
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/history');
+                }, //TODO: Change page here
               ),
             ),
           ),
@@ -66,7 +70,9 @@ class _AdvancedNavBarState extends State<AdvancedNavBar> {
                   size: _iconSize,
                   color: _iconColor,
                 ),
-                onPressed: () {}, //TODO: Change page here
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/profile');
+                }, //TODO: Change page here
               ),
             ),
           ),
