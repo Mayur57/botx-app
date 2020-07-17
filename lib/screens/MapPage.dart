@@ -3,7 +3,6 @@ import 'package:botx/requests/google_maps_requests.dart';
 import 'package:botx/widgets/advancedNavigationBar.dart';
 import 'package:botx/widgets/centerFloatingActionButton.dart';
 import 'package:botx/widgets/customSearchBar.dart';
-import 'package:botx/widgets/mapToggleFAB.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,6 +16,7 @@ class MapPage extends StatefulWidget {
   _MapPageState createState() => _MapPageState();
 }
 
+//Hi this was changed
 class _MapPageState extends State<MapPage> {
   Timer _timer;
   bool delayTimeoutConstant = false;
