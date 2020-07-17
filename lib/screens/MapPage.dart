@@ -19,6 +19,8 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
 
+  Timer _timer;
+  bool delayTimeoutFactor = false;
   var isGpsEnabled = Geolocator().isLocationServiceEnabled();
   static LatLng _initialPosition;
   Completer<GoogleMapController> _controller = Completer();
@@ -33,10 +35,20 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     _getUserLocation();
+    _setTimer();
+  }
+
+  _setTimer() {
+    _timer = new Timer(Duration(milliseconds: 2000), () { //Timeout is set to 2 seconds for the location warning
+      setState(() {
+        delayTimeoutFactor = true;
+      });
+    });
   }
 
   void _setMapStyle(GoogleMapController controller) async {
-    String style = await DefaultAssetBundle.of(context).loadString('map/mapstyle.json');
+    String style =
+        await DefaultAssetBundle.of(context).loadString('map/mapstyle.json');
     _mapController.setMapStyle(style);
   }
 
@@ -45,18 +57,49 @@ class _MapPageState extends State<MapPage> {
     return _initialPosition == null
         ? Scaffold(
             backgroundColor: Colors.white,
-            body: Container(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  CircularProgressIndicator(),
-                  Text(
-                    'Getting Location',
-                    textAlign: TextAlign.center,
+            body: Stack(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          height: 70,
+                          width: 70,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 6,
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Fetching Device Location',
+                        textAlign: TextAlign.center,
+                      ),
+//                      Text(
+//                        'Please Wait...',
+//                        textAlign: TextAlign.center,
+//                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Container(
+                      height: 70,
+                      child: delayTimeoutFactor ? Text(
+                        "Important: If you see this screen for more than 5 seconds, please check your Device Location settings and enable Location Services with location accuracy set to HIGH ACCURACY.",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(fontSize: 11),
+                      )
+                      :  Text(" "),
+                  ),
+                  ),
+                )
+              ],
             ),
           )
         : Scaffold(
@@ -83,15 +126,15 @@ class _MapPageState extends State<MapPage> {
             ),
             floatingActionButton: CenterFAB(),
             bottomNavigationBar: AdvancedNavBar(),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
           );
   }
 
-  void _onMapCreated(GoogleMapController controller){
+  void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
-    setState(() {
+    setState(() {});
 
-    });
     _setMapStyle(controller);
   }
 

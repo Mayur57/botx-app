@@ -1,3 +1,6 @@
+import 'dart:ui';
+import 'package:botx/widgets/destinationTextField.dart';
+import 'package:botx/widgets/sourceTextField.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
@@ -12,23 +15,40 @@ class _SearchBarState extends State<SearchBar> {
       child: Column(
         children: <Widget>[
           SizedBox(
-            height: 15,
+            height: 25,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Card(
-              elevation: 8,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(180.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 2, vertical: 2),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Search a location',
-                    prefixIcon: Icon(Icons.search),
+            padding: EdgeInsets.all(10),
+            child: Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaY: 25.0,
+                    sigmaX: 25.0,
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                            child: SourceTextField(),
+                          ),
+                          Divider(
+                            color: Colors.white24, thickness: 2,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                            child: DestinationTextField(),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
