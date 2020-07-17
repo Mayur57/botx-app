@@ -1,5 +1,5 @@
+import 'package:botx/screens/MapPage.dart';
 import 'package:flutter/material.dart';
-import 'package:botx/screens/map.dart';
 
 void main() {
   runApp(MyApp());
