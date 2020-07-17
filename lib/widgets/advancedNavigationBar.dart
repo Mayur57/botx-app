@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -11,7 +13,8 @@ class _AdvancedNavBarState extends State<AdvancedNavBar> {
   final double _iconSize = 32;
   final Color _iconColor = Colors.white;
   FToast fToast;
-  bool deviceState = false;
+  bool deviceStateUnlocked = false;
+  bool lockIconState = false;
 
   @override
   void initState() {
@@ -20,60 +23,74 @@ class _AdvancedNavBarState extends State<AdvancedNavBar> {
   }
 
   _showToast() {
-    Widget toast = deviceState
-        ? Container(
-            //Device unlocked
-            width: 500,
-            height: 110,
-            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.0),
-              color: Colors.greenAccent.withOpacity(0.9),
-            ),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.lock_open,
-                    size: 30,
+    Widget toast = deviceStateUnlocked
+        ? ClipRRect(
+            borderRadius: BorderRadius.circular(16.0),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaY: 25.0,
+                sigmaX: 25.0,
+              ),
+              child: Container(
+                height: 200,
+                width: 250,
+                decoration: BoxDecoration(
+                  color: Colors.greenAccent.withOpacity(0.25),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.lock_open,
+                        size: 60,
+                        color: Colors.white70,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        "Device Unlocked",
+                        style: TextStyle(fontSize: 25, color: Colors.white70),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: 12.0,
-                  ),
-                  Text(
-                    "Device Unlocked",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                ],
+                ),
               ),
             ),
           )
-        : Container(
-            //Device Locked
-            width: 500,
-            height: 110,
-            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.0),
-              color: Colors.redAccent.withOpacity(0.9),
-            ),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.lock_outline,
-                    size: 30,
+        : ClipRRect(
+            borderRadius: BorderRadius.circular(16.0),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaY: 25.0,
+                sigmaX: 25.0,
+              ),
+              child: Container(
+                height: 200,
+                width: 250,
+                decoration: BoxDecoration(
+                  color: Colors.redAccent.withOpacity(0.25),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.lock_outline,
+                        size: 60,
+                        color: Colors.white70,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        "Device Locked",
+                        style: TextStyle(fontSize: 25, color: Colors.white70),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: 12.0,
-                  ),
-                  Text(
-                    "Device Locked",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                ],
+                ),
               ),
             ),
           );
@@ -89,7 +106,7 @@ class _AdvancedNavBarState extends State<AdvancedNavBar> {
   }
 
   toggleUnlockState() {
-    deviceState = !deviceState;
+    deviceStateUnlocked = !deviceStateUnlocked;
   }
 
   @override
@@ -103,13 +120,22 @@ class _AdvancedNavBarState extends State<AdvancedNavBar> {
             child: Padding(
               padding: _iconPadding,
               child: IconButton(
-                icon: Icon(
-                  Icons.lock_open,
-                  size: _iconSize,
-                  color: _iconColor,
-                ),
+                icon: !lockIconState
+                    ? Icon(
+                        Icons.lock_open,
+                        size: _iconSize,
+                        color: _iconColor,
+                      )
+                    : Icon(
+                        Icons.lock_outline,
+                        size: _iconSize,
+                        color: _iconColor,
+                      ),
                 onPressed: () {
                   _showToast();
+                  setState(() {
+                    lockIconState = !lockIconState;
+                  });
                 }, //TODO: Change page here
               ),
             ),
