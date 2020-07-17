@@ -6,19 +6,25 @@ class AdvancedNavBar extends StatefulWidget {
 }
 
 class _AdvancedNavBarState extends State<AdvancedNavBar> {
+  final EdgeInsetsGeometry _iconPadding = EdgeInsets.all(8.0);
+  final double _iconSize = 32;
+  final Color _iconColor = Colors.white;
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      color: Colors.black,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(6.0),
+              padding: _iconPadding,
               child: IconButton(
                 icon: Icon(
                   Icons.lock_open,
-                  size: 30,
+                  size: _iconSize,
+                  color: _iconColor,
                 ),
                 onPressed: () {}, //TODO: Change page here
               ),
@@ -26,11 +32,12 @@ class _AdvancedNavBarState extends State<AdvancedNavBar> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(6.0),
+              padding: _iconPadding,
               child: IconButton(
                 icon: Icon(
                   Icons.graphic_eq,
-                  size: 30,
+                  size: _iconSize,
+                  color: _iconColor,
                 ),
                 onPressed: () {}, //TODO: Change page here
               ),
@@ -39,11 +46,12 @@ class _AdvancedNavBarState extends State<AdvancedNavBar> {
           Expanded(child: Text('')),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(6.0),
+              padding: _iconPadding,
               child: IconButton(
                 icon: Icon(
                   Icons.timer,
-                  size: 30,
+                  size: _iconSize,
+                  color: _iconColor,
                 ),
                 onPressed: () {}, //TODO: Change page here
               ),
@@ -51,11 +59,12 @@ class _AdvancedNavBarState extends State<AdvancedNavBar> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(6.0),
+              padding: _iconPadding,
               child: IconButton(
                 icon: Icon(
                   Icons.person,
-                  size: 30,
+                  size: _iconSize,
+                  color: _iconColor,
                 ),
                 onPressed: () {}, //TODO: Change page here
               ),
