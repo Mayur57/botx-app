@@ -21,6 +21,7 @@ class MapPage extends StatefulWidget {
 
 //Hi this was changed
 class MapPageState extends State<MapPage> {
+
   Timer _timer;
   bool delayTimeoutConstant = false;
   var isGpsEnabled = Geolocator().isLocationServiceEnabled();
