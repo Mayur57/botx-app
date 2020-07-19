@@ -1,49 +1,61 @@
 import 'dart:async';
-import 'dart:ui';
-import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../globals/api.dart' as global;
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:botx/requests/google_maps_requests.dart';
 import 'package:botx/widgets/advancedNavigationBar.dart';
 import 'package:botx/widgets/centerFloatingActionButton.dart';
 import 'package:botx/widgets/customSearchBar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 //TODO: Save all strings into a different file : strings.dart
 
 class MapPage extends StatefulWidget {
   @override
-  MapPageState createState() => MapPageState();
+  _MapPageState createState() => _MapPageState();
 }
 
-//Hi this was changed
-class MapPageState extends State<MapPage> {
-
+class _MapPageState extends State<MapPage> {
   Timer _timer;
+  PolylineId id = PolylineId("ID");
   bool delayTimeoutConstant = false;
   var isGpsEnabled = Geolocator().isLocationServiceEnabled();
-  //static LatLng _initialPosition;
-  Completer<GoogleMapController> _controller = Completer();
+  static LatLng _initialPosition;
+  Map<PolylineId, Polyline> polyLines = {};
   GoogleMapController _mapController;
   PolylinePoints polylinePoints = PolylinePoints();
-  //LatLng initialPosition;
-  //Map<MarkerId, Marker> myMarkers = <MarkerId, Marker>{};
-  //Set<Marker> myMarker = {};
-
+  String route;
+  Set<Marker> myMarker = {};
+  MapType _currentMapType = MapType.normal;
 
   @override
   void initState() {
     super.initState();
-    getUserLocation();
+    _getUserLocation();
     _setTimer();
+    BackButtonInterceptor.add(interceptBackButtonEvent);
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(interceptBackButtonEvent);
+    super.dispose();
+  }
+
+  bool interceptBackButtonEvent(bool stopDefaultButtonEvent) {
+    setState(() {
+      myMarker = {};
+      Polyline polylineReset = Polyline(polylineId: id, color: Colors.blueAccent, points: <LatLng>[]);
+      polyLines[id] = polylineReset;
+    });
+    print("debugTest - Back Interceptor");
+    return true;
   }
 
   _setTimer() {
-    _timer = new Timer(Duration(milliseconds: 2000), () {
-      //Timeout is set to 2 seconds for the location warning
+    _timer = new Timer(Duration(milliseconds: 3000), () { //Timeout is set to 2 seconds for the location warning
       setState(() {
         delayTimeoutConstant = true;
       });
@@ -58,7 +70,7 @@ class MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return global.initialPosition == null
+    return _initialPosition == null
         ? Scaffold(
             backgroundColor: Colors.white,
             body: Stack(
@@ -71,8 +83,8 @@ class MapPageState extends State<MapPage> {
                       Container(
                           height: 70,
                           width: 70,
-                          child: SpinKitWave(
-                            color: Colors.blueAccent,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 6,
                           )),
                       SizedBox(
                         height: 20,
@@ -94,14 +106,13 @@ class MapPageState extends State<MapPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Container(
                       height: 70,
-                      child: delayTimeoutConstant
-                          ? Text(
-                              "Important: If you see this screen for more than 5 seconds, please check your Device Location settings and enable Location Services with location accuracy set to HIGH ACCURACY.",
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(fontSize: 11),
-                            )
-                          : Text(" "),
-                    ),
+                      child: delayTimeoutConstant ? Text(
+                        "Important: If you see this screen for more than 5 seconds, please check your Device Location settings and enable Location Services with location accuracy set to HIGH ACCURACY.",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(fontSize: 11),
+                      )
+                      :  Text(" "),
+                  ),
                   ),
                 )
               ],
@@ -115,13 +126,14 @@ class MapPageState extends State<MapPage> {
                   compassEnabled: false,
                   zoomControlsEnabled: false,
                   myLocationEnabled: true,
+                  mapType: _currentMapType,
                   tiltGesturesEnabled: true,
                   initialCameraPosition:
-                      CameraPosition(target: global.initialPosition, zoom: 16),
+                      CameraPosition(target: _initialPosition, zoom: 16),
                   onMapCreated: _onMapCreated,
-                  onLongPress: marker,
-                  markers: global.myMarker.values.toSet(),
-                  polylines: global.polyLines.values.toSet(),
+                  onLongPress: _Marker,
+                  markers: myMarker,
+                  polylines: Set<Polyline>.of(polyLines.values),
                 ),
                 //MapToogleFAB(),
                 ///Disabled due to developer request
@@ -142,101 +154,52 @@ class MapPageState extends State<MapPage> {
   }
 
   // ignore: non_constant_identifier_names
-
-  marker(LatLng tappedPoint) async {
-    switch (global.pickUpType) {
-      case 1:
-        setState(() {
-          final marker2 = Marker(
-              markerId: MarkerId(tappedPoint.toString()),
-              position: tappedPoint,
-              infoWindow: InfoWindow(
-                title: "Destination",
-              ));
-          global.myMarker[2] = marker2;
-          print("##########################################");
-          getPolyline(global.initialPosition, tappedPoint);
-        });
-        break;
-      case 2:
-        setState(() {
-          final marker2 = Marker(
-              markerId: MarkerId(tappedPoint.toString()),
-              position: tappedPoint,
-              infoWindow: InfoWindow(
-                title: "Destination",
-              ));
-          global.initialPosition = global.currentLocation;
-          global.myMarker[2] = marker2;
-          print("##########################################");
-          getPolyline(global.initialPosition, tappedPoint);
-        });
-        break;
-      case 3:
-        setState(() {
-          final marker1 = Marker(
-              markerId: MarkerId(tappedPoint.toString()),
-              position: tappedPoint,
-              infoWindow: InfoWindow(
-                title: "Pick-Up",
-              ));
-          global.myMarker[1] = marker1;
-          print("==========================================");
-          global.pickUpType = 1;
-          global.initialPosition = tappedPoint;
-        });
-        break;
-      default:
-        setState(() {
-          final marker2 = Marker(
-              markerId: MarkerId(tappedPoint.toString()),
-              position: tappedPoint,
-              infoWindow: InfoWindow(
-                title: "Destination",
-              ));
-          global.myMarker[2] = marker2;
-          print("##########################################");
-          getPolyline(global.initialPosition, tappedPoint);
-        });
-        break;
-    }
-  }
-
-  void getUserLocation() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+  _Marker(LatLng tappedPoint) async {
+    myMarker = {};
     setState(() {
-      global.currentLocation = LatLng(position.latitude, position.longitude);
-      global.initialPosition = global.currentLocation;
+      myMarker.add(
+        Marker(
+          markerId: MarkerId(tappedPoint.toString()),
+          position: tappedPoint,
+          draggable: false,
+          infoWindow: InfoWindow(
+            title: tappedPoint.toString(),
+            snippet: 'Cool place',
+          ),
+        ),
+      );
+      _getPolyline(tappedPoint);
     });
   }
 
-  getPolyline(LatLng source, LatLng destination) async {
+  void _getUserLocation() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    setState(() {
+      _initialPosition = LatLng(position.latitude, position.longitude);
+    });
+  }
+
+  _getPolyline(LatLng destination) async {
     List<LatLng> polylineCoordinates = [];
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       apikey,
-      PointLatLng(source.latitude, source.longitude),
+      PointLatLng(_initialPosition.latitude, _initialPosition.longitude),
       PointLatLng(destination.latitude, destination.longitude),
-      travelMode: TravelMode.driving,
     );
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     }
-    addPolyLine(polylineCoordinates);
+    _addPolyLine(polylineCoordinates);
   }
 
-  addPolyLine(List<LatLng> cords) {
-    PolylineId id = PolylineId("Poly");
+  _addPolyLine(List<LatLng> coordinates) {
     Polyline polyline =
-        Polyline(polylineId: id, color: Colors.blueAccent, points: cords);
-    global.polyLines[id] = polyline;
-    print("----------------POLYLINE---------------------");
-    print(global.polyLines.values.toSet().toString());
+        Polyline(polylineId: id, color: Colors.blueAccent, points: coordinates);
+    polyLines[id] = polyline;
+
     setState(() {});
   }
 }
-
-
-
