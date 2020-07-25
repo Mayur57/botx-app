@@ -52,7 +52,7 @@ class MapPageState extends State<MapPage> {
 
   void _setMapStyle(GoogleMapController controller) async {
     String style =
-        await DefaultAssetBundle.of(context).loadString('map/mapstyle.json');
+    await DefaultAssetBundle.of(context).loadString('map/mapstyle.json');
     _mapController.setMapStyle(style);
   }
 
@@ -60,10 +60,16 @@ class MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return global.initialPosition == null
         ? Scaffold(
-            backgroundColor: Colors.white,
-            body: Stack(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
+
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -85,6 +91,7 @@ class MapPageState extends State<MapPage> {
 //                        'Please Wait...',
 //                        textAlign: TextAlign.center,
 //                      ),
+
                     ],
                   ),
                 ),
@@ -104,35 +111,57 @@ class MapPageState extends State<MapPage> {
                     ),
                   ),
                 )
+
               ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Container(
+                height: 70,
+                child: delayTimeoutConstant
+                    ? Text(
+                  "Important: If you see this screen for more than 5 seconds, please check your Device Location settings and enable Location Services with location accuracy set to HIGH ACCURACY.",
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(fontSize: 11),
+                )
+                    : Text(" "),
+              ),
             ),
           )
+        ],
+      ),
+    )
         : Scaffold(
-            body: Stack(
-              children: <Widget>[
-                GoogleMap(
-                  myLocationButtonEnabled: false,
-                  compassEnabled: false,
-                  zoomControlsEnabled: false,
-                  myLocationEnabled: true,
-                  tiltGesturesEnabled: true,
-                  initialCameraPosition:
-                      CameraPosition(target: global.initialPosition, zoom: 16),
-                  onMapCreated: _onMapCreated,
-                  onLongPress: marker,
-                  markers: global.myMarker.values.toSet(),
-                  polylines: global.polyLines.values.toSet(),
-                ),
-                //MapToogleFAB(),
-                ///Disabled due to developer request
-                SearchBar(),
-              ],
-            ),
-            floatingActionButton: CenterFAB(),
-            bottomNavigationBar: AdvancedNavBar(),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-          );
+
+      body: Stack(
+        children: <Widget>[
+          GoogleMap(
+            myLocationButtonEnabled: false,
+            compassEnabled: false,
+            zoomControlsEnabled: false,
+            myLocationEnabled: true,
+            tiltGesturesEnabled: true,
+            initialCameraPosition:
+            CameraPosition(target: global.initialPosition, zoom: 16),
+            onMapCreated: _onMapCreated,
+            onLongPress: marker,
+            markers: global.myMarker.values.toSet(),
+            polylines: global.polyLines.values.toSet(),
+          ),
+          //MapToogleFAB(),
+          ///Disabled due to developer request
+          SearchBar(),
+        ],
+      ),
+      floatingActionButton: CenterFAB(),
+      bottomNavigationBar: AdvancedNavBar(),
+      floatingActionButtonLocation:
+      FloatingActionButtonLocation.centerDocked,
+    );
+
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -230,13 +259,14 @@ class MapPageState extends State<MapPage> {
   addPolyLine(List<LatLng> cords) {
     PolylineId id = PolylineId("Poly");
     Polyline polyline =
-        Polyline(polylineId: id, color: Colors.blueAccent, points: cords);
+
+    Polyline(polylineId: id, color: Colors.blueAccent, points: cords);
+
     global.polyLines[id] = polyline;
     print("----------------POLYLINE---------------------");
     print(global.polyLines.values.toSet().toString());
     setState(() {});
   }
+
 }
-
-
 
