@@ -69,22 +69,49 @@ class MapPageState extends State<MapPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                    height: 70,
-                    width: 70,
-                    child: SpinKitWave(
-                      color: Colors.blueAccent,
-                    )),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Fetching Device Location',
-                  textAlign: TextAlign.center,
-                ),
+
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          height: 70,
+                          width: 70,
+                          child: SpinKitWave(
+                            color: Colors.blueAccent,
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Fetching Device Location',
+                        textAlign: TextAlign.center,
+                      ),
 //                      Text(
 //                        'Please Wait...',
 //                        textAlign: TextAlign.center,
 //                      ),
+
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Container(
+                      height: 70,
+                      child: delayTimeoutConstant
+                          ? Text(
+                              "Important: If you see this screen for more than 5 seconds, please check your Device Location settings and enable Location Services with location accuracy set to HIGH ACCURACY.",
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(fontSize: 11),
+                            )
+                          : Text(" "),
+                    ),
+                  ),
+                )
+
               ],
             ),
           ),
@@ -108,6 +135,7 @@ class MapPageState extends State<MapPage> {
       ),
     )
         : Scaffold(
+
       body: Stack(
         children: <Widget>[
           GoogleMap(
@@ -133,6 +161,7 @@ class MapPageState extends State<MapPage> {
       floatingActionButtonLocation:
       FloatingActionButtonLocation.centerDocked,
     );
+
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -230,10 +259,14 @@ class MapPageState extends State<MapPage> {
   addPolyLine(List<LatLng> cords) {
     PolylineId id = PolylineId("Poly");
     Polyline polyline =
+
     Polyline(polylineId: id, color: Colors.blueAccent, points: cords);
+
     global.polyLines[id] = polyline;
     print("----------------POLYLINE---------------------");
     print(global.polyLines.values.toSet().toString());
     setState(() {});
   }
+
 }
+
