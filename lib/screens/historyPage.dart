@@ -1,3 +1,5 @@
+import 'package:botx/util/scalar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -16,3 +18,5 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 }
+
+
