@@ -49,7 +49,4 @@ class _DestinationTextFieldState extends State<DestinationTextField> {
       ],
     );
   }
-
-
-  }
-
+}
