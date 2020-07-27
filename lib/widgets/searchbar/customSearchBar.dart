@@ -1,6 +1,6 @@
 import 'dart:ui';
-import 'package:botx/widgets/destinationTextField.dart';
-import 'package:botx/widgets/sourceTextField.dart';
+import 'package:botx/widgets/searchbar/destinationTextField.dart';
+import 'package:botx/widgets/searchbar/sourceTextField.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
