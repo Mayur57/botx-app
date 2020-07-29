@@ -42,12 +42,11 @@ class MyAppScaffoldState extends State<BotVitalsPage> {
       appBar: new AppBar(
         backgroundColor: Colors.black,
         centerTitle: true,
-        title: Text('Bot Vitals',
-            textAlign: TextAlign.justify,
-            style: new TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30.0,
-                color: Colors.white)),
+        title: Text(
+          'Bot Vitals',
+          textAlign: TextAlign.justify,
+          style: new TextStyle(fontSize: 20.0, color: Colors.white),
+        ),
       ),
       body: new Container(
         color: Colors.black,
@@ -65,7 +64,7 @@ class MyAppScaffoldState extends State<BotVitalsPage> {
                 new Card(
                   color: Colors.black.withOpacity(0.8),
                   shadowColor: Colors.blue,
-                  elevation: 10,
+                  elevation: 0,
                   child: new Container(
                     //padding: new EdgeInsets.all(190.0),
                     padding: const EdgeInsets.only(
@@ -176,7 +175,7 @@ class MyAppScaffoldState extends State<BotVitalsPage> {
               boxShadow: [
                 new BoxShadow(
                   color: Colors.blue,
-                  blurRadius: 10.0,
+                  blurRadius: 5.0,
                 ),
               ],
             ),
