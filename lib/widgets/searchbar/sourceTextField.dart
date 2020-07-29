@@ -11,17 +11,21 @@ class SourceTextField extends StatefulWidget {
 class SourceTextFieldState extends State<SourceTextField> {
   TextEditingController source = TextEditingController();
   int state;
-  int selectedButtonState;
-  int ML_BUTTON_STATE = 0; //My Location Button State
-  int CM_BUTTON_STATE = 1; //Custom Marker Button State
-  int TF_BUTTON_STATE = -999; //Text Field Button State
+
+  static int ML_BUTTON_STATE = 0; //My Location Button State
+  static int CM_BUTTON_STATE = 1; //Custom Marker Button State
+  static int TF_BUTTON_STATE = -999; //Text Field Button State
+  int selectedButtonState = ML_BUTTON_STATE;
+
 
 
   _changeState() {
     setState(() {
-      selectedButtonState == CM_BUTTON_STATE
-          ? selectedButtonState = ML_BUTTON_STATE
-          : selectedButtonState = CM_BUTTON_STATE;
+
+      selectedButtonState != CM_BUTTON_STATE
+          ? selectedButtonState = CM_BUTTON_STATE
+          : selectedButtonState = ML_BUTTON_STATE;
+
     });
   }
 
@@ -29,7 +33,9 @@ class SourceTextFieldState extends State<SourceTextField> {
     setState(() {
       selectedButtonState = TF_BUTTON_STATE;
     });
-}
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,146 +62,97 @@ class SourceTextFieldState extends State<SourceTextField> {
             ),
           ),
         ),
-        selectedButtonState == ML_BUTTON_STATE
-            ? Padding(
-                //selectedState
-                padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                child: Container(
-                  decoration: new BoxDecoration(
-                    color: Colors.blue.withOpacity(0.4),
+
+        Padding(
+          //selectedState
+          padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: Container(
+            decoration: selectedButtonState == ML_BUTTON_STATE ? new BoxDecoration(
+              color: Colors.blue.withOpacity(0.4),
 //                    border: Border.all(color: Colors.blue, width: 2),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.my_location,
-                      color: Colors.white60,
-                    ),
-                    onPressed: () {
-                      state = 2;
-                      setState(() {
-//                  print("====================CURRENT LOCATION===================");
-//                  global.polyLines.remove("Poly");
-//                  global.myMarker.remove(1);
-//                  global.myMarker.remove(2);
-//                  global.myMarker.clear();
-//                  global.polyLines.clear();
-//                  print(global.pickUpType);
-//                  global.initialPosition = global.currentLocation;
-//                  global.pickUpType = state;
-//                  print("Select my location");
-//                  print(global.pickUpType);
-                      });
-                    },
-                  ),
-                ),
-              )
-            : Padding(
-                //deselectedState
-                padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                child: Container(
-//                  decoration: new BoxDecoration(
-////                    color: Colors.blueAccent.withOpacity(0.2),
-////                    border: Border.all(color: Colors.blue, width: 2),
-////                    borderRadius: BorderRadius.all(
-////                      Radius.circular(8),
-////                    ),
-//                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.my_location,
-                      color: Colors.white60,
-                    ),
-                    onPressed: () {
-                      state = 2;
-                      setState(() {
-                        _changeState();
-                        print(
-                            "====================CURRENT LOCATION===================");
-                        global.polyLines.remove("Poly");
-                        global.myMarker.remove(1);
-                        global.myMarker.remove(2);
-                        global.myMarker.clear();
-                        global.polyLines.clear();
-                        print(global.pickUpType);
-                        global.initialPosition = global.currentLocation;
-                        global.pickUpType = state;
-                        print("Select my location");
-                        print(global.pickUpType);
-                      });
-                    },
-                  ),
-                ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
               ),
-        selectedButtonState == CM_BUTTON_STATE
-            ? Padding(
-                //selectedState
-                padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                child: Container(
-                  decoration: new BoxDecoration(
-                    color: Colors.blue.withOpacity(0.4),
+            ) : new BoxDecoration(
+              color: Colors.blue.withOpacity(0.0),
 //                    border: Border.all(color: Colors.blue, width: 2),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.location_on,
-                      color: Colors.white60,
-                    ),
-                    onPressed: () {
-                      state = 3;
-                      setState(() {
-//                  print("=====================MARKER========================");
-//                  global.polyLines.remove("Poly");
-//                  global.myMarker.remove(1);
-//                  global.myMarker.remove(2);
-//                  global.myMarker.clear();
-//                  global.polyLines.clear();
-//                  print(global.pickUpType);
-//                  global.pickUpType = state;
-//                  print("Select marker on map");
-//                  print(global.pickUpType);
-                      });
-                    },
-                  ),
-                ),
-              )
-            : Padding(
-                //deselectedState
-                padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                child: Container(
-                  decoration: new BoxDecoration(
-                      //color: Colors.blueAccent.withOpacity(0.5),
-//              borderRadius: BorderRadius.all(
-//                Radius.circular(8),
-//              ),
-                      ),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.location_on,
-                      color: Colors.white60,
-                    ),
-                    onPressed: () {
-                      _changeState();
-                      print(
-                          "=====================MARKER========================");
-                      global.polyLines.remove("Poly");
-                      global.myMarker.remove(1);
-                      global.myMarker.remove(2);
-                      global.myMarker.clear();
-                      global.polyLines.clear();
-                      print(global.pickUpType);
-                      global.pickUpType = state;
-                      print("Select marker on map");
-                      print(global.pickUpType);
-                    },
-                  ),
-                ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
               ),
+            ) ,
+            child: IconButton(
+              icon: Icon(
+                Icons.my_location,
+                color: Colors.white60,
+              ),
+              onPressed: () {
+                state = 2;
+                setState(() {
+                  if(selectedButtonState != ML_BUTTON_STATE){
+                    _changeState();
+                  }
+                  print(
+                      "====================CURRENT LOCATION===================");
+                  global.polyLines.remove("Poly");
+                  global.myMarker.remove(1);
+                  global.myMarker.remove(2);
+                  global.myMarker.clear();
+                  global.polyLines.clear();
+                  print(global.pickUpType);
+                  global.initialPosition = global.currentLocation;
+                  global.pickUpType = state;
+                  print("Select my location");
+                  print(global.pickUpType);
+                });
+              },
+            ),
+          ),
+        ),
+        Padding(
+          //selectedState
+          padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+          child: Container(
+            decoration: selectedButtonState == CM_BUTTON_STATE ? new BoxDecoration(
+              color: Colors.blue.withOpacity(0.4),
+//                    border: Border.all(color: Colors.blue, width: 2),
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
+              ),
+            ) : new BoxDecoration(
+              color: Colors.blue.withOpacity(0.0),
+//                    border: Border.all(color: Colors.blue, width: 2),
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
+              ),
+            ),
+            child: IconButton(
+              icon: Icon(
+                Icons.location_on,
+                color: Colors.white60,
+              ),
+              onPressed: () {
+                state = 3;
+                setState(() {
+                  if(selectedButtonState != CM_BUTTON_STATE){
+                    _changeState();
+                  }
+                  print(
+                      "=====================MARKER========================");
+                  global.polyLines.remove("Poly");
+                  global.myMarker.remove(1);
+                  global.myMarker.remove(2);
+                  global.myMarker.clear();
+                  global.polyLines.clear();
+                  print(global.pickUpType);
+                  global.pickUpType = state;
+                  print("Select marker on map");
+                  print(global.pickUpType);
+                });
+              },
+            ),
+          ),
+        )
+
       ],
     );
   }
