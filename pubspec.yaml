@@ -1,7 +1,7 @@
 name: botx
 description: An application client for BotX service
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 0.2.0
 
@@ -22,11 +22,12 @@ dependencies:
   fluttertoast: ^7.0.1
   google_maps_webservice: ^0.0.17
   flutter_google_places: ^0.2.5
+
+  back_button_interceptor: ^4.2.4
   flutter_vlc_player: ^3.0.3
   percent_indicator: ^2.1.5
-
-
-
+  battery: 1.0.1
+  provider: 3.0.0
 
 dev_dependencies:
   flutter_test:
