@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart' as gws;
 import 'package:flutter_google_places/flutter_google_places.dart';
-import '../globals/api.dart' as global;
+import '../../globals/api.dart' as global;
 
 class DestinationTextField extends StatefulWidget {
   @override
@@ -14,9 +14,6 @@ class DestinationTextField extends StatefulWidget {
 
 class _DestinationTextFieldState extends State<DestinationTextField> {
   TextEditingController destination = TextEditingController();
-
-  //final MapPageState _myMap = MapPageState.instance;
-  //MapPageState myMap = MapPageState();
 
   LatLng dest;
   int state;
