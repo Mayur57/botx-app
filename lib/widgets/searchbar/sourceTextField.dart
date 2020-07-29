@@ -11,17 +11,21 @@ class SourceTextField extends StatefulWidget {
 class SourceTextFieldState extends State<SourceTextField> {
   TextEditingController source = TextEditingController();
   int state;
+
   static int ML_BUTTON_STATE = 0; //My Location Button State
   static int CM_BUTTON_STATE = 1; //Custom Marker Button State
   static int TF_BUTTON_STATE = -999; //Text Field Button State
   int selectedButtonState = ML_BUTTON_STATE;
 
 
+
   _changeState() {
     setState(() {
+
       selectedButtonState != CM_BUTTON_STATE
           ? selectedButtonState = CM_BUTTON_STATE
           : selectedButtonState = ML_BUTTON_STATE;
+
     });
   }
 
@@ -29,7 +33,9 @@ class SourceTextFieldState extends State<SourceTextField> {
     setState(() {
       selectedButtonState = TF_BUTTON_STATE;
     });
+
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +62,7 @@ class SourceTextFieldState extends State<SourceTextField> {
             ),
           ),
         ),
+
         Padding(
           //selectedState
           padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
@@ -145,6 +152,7 @@ class SourceTextFieldState extends State<SourceTextField> {
             ),
           ),
         )
+
       ],
     );
   }
